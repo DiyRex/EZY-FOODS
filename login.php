@@ -62,6 +62,12 @@
       </div>
     </div>
   </div>
+
+<?php
+  include './components/footer.php';
+  footer();
+  ?>
+  
 </section>
     
 <?php
