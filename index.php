@@ -10,10 +10,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
 </head>
 <body>
+    <div class="nav">
     <?php
     include './components/navbar.php';
     ?>
-    <button class="btn" id="mybutton">scroll</button>
+    </div>
+    <button class="btn" id="mybutton">EXPLORE</button>
     <div class="red" id="red1"></div>
     <div class="blue" id="blue1"></div>
     <div class="green" id="green1"></div>
