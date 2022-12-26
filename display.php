@@ -1,10 +1,12 @@
 <?php
 $username = "root";
 $password = "";
-$database = "myshop";
+$database = "ezyfoods";
 $mysqli = new mysqli("localhost", $username, $password, $database);
 
-$query = "SELECT * FROM recipe_tb1 WHERE id=1";
+$id = $_GET['id'];
+
+$query = "SELECT * FROM recipe WHERE id=$id";
 echo "<b> <center>Database Output</center> </b> <br> <br>";
 
 if ($result = $mysqli->query($query)) {
