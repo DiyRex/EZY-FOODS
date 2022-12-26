@@ -1,4 +1,29 @@
+<?php
+session_start();
+include './config/config.php';
+include './config/warning.php';
+$email = $_POST["email"];
+$password = $_POST["password"];
+  
+if(isset($email)){
 
+$query = mysqli_query($connection,"select * from admin");
+
+while($row = mysqli_fetch_array($query)){
+
+if($email == $row['UMAIL'] && $password == $row['UPASSWD']){
+    $_SESSION['email'] = $email;
+    header("Location: /dashboard.php");
+    
+}else if(!($email == $row['UMAIL']) && !($password == $row['UPASSWD'])){
+    echo $email;
+    echo $password; 
+    
+}
+}
+$mysqli->close();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,6 +34,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <title>Admin-Panel</title>
+
+    <style>
+      .footer {
+        z-index: 100;
+      }
+    </style>
 </head>
 <body>
 
@@ -25,7 +56,7 @@
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">
 
-                <form action="index.php" method="post">
+                <form action="login.php" method="post">
 
                   <div class="d-flex align-items-center mb-3 pb-1">
                     <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
@@ -63,40 +94,16 @@
     </div>
   </div>
 
-<?php
+  <div class="footer">
+  <?php
   include './components/footer.php';
   footer();
   ?>
-  
+  </div>
+
 </section>
     
-<?php
-session_start();
-include './config/config.php';
-include './config/warning.php';
-$email = $_POST["email"];
-$password = $_POST["password"];
-  
-if(isset($email)){
 
-$query = mysqli_query($connection,"select * from users");
-
-while($row = mysqli_fetch_array($query)){
-
-if($email == $row['UMAIL'] && $password == $row['UPASSWD']){
-    echo "<h1>Login Successful</h1>";
-    $_SESSION['email'] = $email;
-    header("Location: ./pages/panel.php");
-    
-}else if(!($email == $row['UMAIL']) && !($password == $row['UPASSWD'])){
-    echo $email;
-    echo $password; 
-    
-}
-}
-$mysqli->close();
-}
-?>
 
 </body>
 </html>

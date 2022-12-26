@@ -1,4 +1,11 @@
-<?php
+<!-- 
+
+    Image edit not added !
+
+    Suggested : add remove button to clean base64 and add new image !!!!
+
+ -->
+ <?php
 session_start();
 if (!isset($_SESSION['email'])) {
     header("Location:../login.php");
@@ -9,6 +16,7 @@ if (!isset($_SESSION['email'])) {
 
 include("../config/config.php");
 
+$id = "";
 $rcname = "";
 $rcingredients = "";
 $rcdir = "";
@@ -17,7 +25,32 @@ $rccategory = "";
 $errorMessage = "";
 $successMessage = "";
 
-if( $_SERVER['REQUEST_METHOD'] == 'POST') {
+if($_SERVER['REQUEST_METHOD'] == 'GET'){
+    // GET method: show the data of the client
+    if( !isset($_GET["id"])){
+        header("location: /pages/panel.php");
+        exit;
+    }
+    $id = $_GET["id"];
+
+    //read the row of the selected client from database table
+    $sql = "SELECT * FROM recipe WHERE id=$id";
+    $result = $connection->query($sql);
+    $row = $result->fetch_assoc();
+    if( !$row ){
+        header("location: /pages/panel.php");
+        exit;
+    } 
+
+    $rcname = $row["recipe"];
+    $rcingredients = $row["ingredients"];
+    $rcdir = $row["method"];
+    $rctime = $row["cooktime"];
+    $rccategory = $row["category"];
+}
+else{
+    // POST method: Update the data of the client
+    $id = $_POST["id"];
     $rcname = $_POST["rcname"];
     $rcingredients = $_POST["rcingredients"];
     $rcdir = $_POST["rcdir"];
@@ -25,18 +58,10 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST') {
     $rccategory = $_POST["category"];
 
     do {
-        if( empty($rcname) || empty($rcingredients) || empty($rcdir) || empty($rctime) || empty($rccategory)) {
+        if( empty($id)) {
             $errorMessage = "All the fields are required";
             break;
         }
-
-        
-
-        //add clients to database
-
-        // $sql = "INSERT INTO imagetb (name, email, phone, address, imgname, image) " .
-        // "VALUES ('$name', '$email', '$phone', '$address', '".$name."','".$image."')";
-        // $result = $connection->query($sql);
 
         // upload images 
 
@@ -62,8 +87,9 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST') {
         
                     // Insert record
 
-                    $sql = "INSERT INTO `recipe` (`recipe`, `ingredients`, `method`, `cooktime`, `category`, `imgname`, `image`) " .
-                    "VALUES ('$rcname', '$rcingredients', '$rcdir', '$rctime', '$rccategory', '".$imgname."','".$image."')";   /// ! updated
+                    $sql = "UPDATE recipe ".
+                    "SET recipe = '$rcname', ingredients='$rcingredients', method='$rcdir', cooktime='$rctime', category='$rccategory' ".
+                    "WHERE id = $id";   /// ! updated
                     $result = $connection->query($sql);
                     unlink('upload/'.$imgname);
                 }
@@ -72,21 +98,15 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST') {
         
         }
 
+        $result = $connection->query($sql);
+
         if(!$result){
             die("Invalid query: ". $connection->error);
             break;
         }
-
-        $rcname = "";
-        $rcingredients = "";
-        $rcdir = "";
-        $rctime = "";
-        $rccategory = "";
-        $successMessage = "Client added correctly";
-
+        $successMessage = "Client updated correctly";
         header("location: /pages/panel.php");
-        exit;
-        
+
     }while(false);
 }
 ?>
@@ -98,21 +118,15 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Recipe</title>
-    <link rel="stylesheet" href="./styles/common.css">
+    <title>Edit Recipe</title>
     <link rel="stylesheet" href="	https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <style>
-        #choose {
-            margin-top: -35px;
-        }
-    </style>
 </head>
 
 <body>
     <div class="container my-5">
-        <h2 class="mx-5 my-5">New Recipe</h2>
+        <h2 class="mx-5 my-5">Edit Recipe</h2>
 
         <?php
             if(!empty($errorMessage)){
@@ -124,7 +138,8 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST') {
                 ";
             }
         ?>
-        <form method="post" enctype='multipart/form-data'>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?php echo $id;?>">
         
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Recipe Name</label>
@@ -136,14 +151,14 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Ingredients</label>
                 <div class="col-sm-6">
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="rcingredients" value="<?php echo $rcingredients;?>"></textarea>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="rcingredients" value="<?php echo $rcingredients;?>"><?php echo strip_tags($rcingredients);?></textarea>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Directions</label>
                 <div class="col-sm-6">
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="rcdir" value="<?php echo $rcdir;?>"></textarea>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="rcdir" value="<?php echo $rcdir;?>"><?php echo strip_tags($rcdir);?></textarea>
                 </div>
             </div>
 

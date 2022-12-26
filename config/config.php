@@ -6,6 +6,7 @@
             $username = $db['username'];
             $password = $db['password'];
             $database = $db['database'];
+            $table = $db['table'];
 
             //create connection
             $connection = new mysqli($servername, $username, $password, $database);

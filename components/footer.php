@@ -130,7 +130,6 @@ echo '
                 
             </div>
         </div>
-        <hr class="line">
         <div class="bottom-container">
             <p class="copyright">© 2021 Company, Inc</p>
         </div>
