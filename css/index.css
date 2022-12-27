@@ -88,7 +88,7 @@ a {
   background-image: url("src/i.jpg");
   background-position: center;
   background-position: cover;
-  -webkit-background-size: cover;
+  background-size: cover;
   transition: 0.5s ease;
   backface-visibility: hidden;
 }
@@ -96,31 +96,31 @@ a {
   background-image: url("src/sri.jpg");
   background-position: center;
   background-position: cover;
-  -webkit-background-size: cover;
+  background-size: cover;
 }
 .card3 {
   background-image: url("src/ch.jpg");
   background-position: center;
   background-position: cover;
-  -webkit-background-size: cover;
+  background-size: cover;
 }
 .card4 {
   background-image: url("src/j.jpg");
   background-position: center;
   background-position: cover;
-  -webkit-background-size: cover;
+  background-size: cover;
 }
 .card5 {
   background-image: url("src/thai.jpg");
   background-position: center;
   background-position: cover;
-  -webkit-background-size: cover;
+  background-size: cover;
 }
 .card6 {
   background-image: url("src/R.jpg");
   background-position: center;
   background-position: cover;
-  -webkit-background-size: cover;
+  background-size: cover;
 }
 
 .card:hover {
